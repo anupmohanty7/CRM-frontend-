@@ -1,0 +1,241 @@
+<section class="login-page">
+
+  <div class="login-shell">
+
+    <!-- Left visual panel -->
+
+    <div class="login-visual">
+
+      <div class="visual-top">
+
+        <span class="brand-mark">L</span>
+
+        <span class="brand-name">
+          LEADHELP
+        </span>
+
+      </div>
+
+
+      <div class="visual-content">
+
+        <span class="visual-eyebrow">
+          YOUR CRM WORKSPACE
+        </span>
+
+        <h1>
+          Relationships
+          <em>worth managing.</em>
+        </h1>
+
+        <p>
+          A considered workspace for customers, leads,
+          conversations and everything that keeps your
+          business moving forward.
+        </p>
+
+      </div>
+
+
+      <div class="visual-art">
+
+        <div class="art-frame">
+
+          <div class="art-inner">
+
+            <span class="art-symbol">間</span>
+
+            <span class="art-line"></span>
+
+            <span class="art-text">
+              ORGANIZE
+            </span>
+
+            <span class="art-text">
+              CONNECT
+            </span>
+
+            <span class="art-text">
+              GROW
+            </span>
+
+            <span class="art-line"></span>
+
+            <small>
+              LEADHELP CRM / 2026
+            </small>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div class="visual-footer">
+
+        <span>
+          A QUIET SPACE FOR SERIOUS WORK
+        </span>
+
+        <span>
+          01 / 01
+        </span>
+
+      </div>
+
+    </div>
+
+
+    <!-- Login panel -->
+
+    <div class="login-panel">
+
+      <div class="login-content">
+
+        <div class="mobile-brand">
+
+          <span class="brand-mark">L</span>
+
+          <span class="brand-name">
+            LEADHELP
+          </span>
+
+        </div>
+
+
+        <div class="login-heading">
+
+          <span class="section-label">
+            WELCOME BACK
+          </span>
+
+          <h2>
+            Sign in to
+            <em>LeadHelp.</em>
+          </h2>
+
+          <p>
+            Enter your credentials to continue to your workspace.
+          </p>
+
+        </div>
+
+
+        <form class="login-form" (ngSubmit)="login()">
+
+          <div class="form-group">
+
+            <label for="email">
+              EMAIL ADDRESS
+            </label>
+
+            <input
+            id="email"
+            type="email"
+            name="email"
+            [(ngModel)]="email"
+            placeholder="you@company.com"
+            autocomplete="email"
+            >
+
+          </div>
+
+
+          <div class="form-group">
+
+            <div class="password-label">
+
+              <label for="password">
+                PASSWORD
+              </label>
+
+              <a href="#">
+                Forgot password?
+              </a>
+
+            </div>
+
+            <input
+            id="password"
+            type="password"
+            name="password"
+            [(ngModel)]="password"
+            placeholder="Enter your password"
+            autocomplete="current-password"
+            >
+
+          </div>
+
+
+          <div class="remember-row">
+
+            <label class="remember-option">
+
+              <input
+                type="checkbox"
+              >
+
+              <span class="custom-checkbox"></span>
+
+              <span>
+                Remember me
+              </span>
+
+            </label>
+
+          </div>
+
+        <div class="error-message" *ngIf="errorMessage">
+        {{ errorMessage }}
+        </div>
+
+          <button
+            type="submit"
+            class="login-button"
+            [disabled]="isLoading"
+            >
+            <span>
+                {{ isLoading ? 'Signing in...' : 'Enter LeadHelp' }}
+            </span>
+
+            <strong>
+                →
+            </strong>
+            </button>
+
+        </form>
+
+
+        <div class="login-divider">
+
+          <span></span>
+
+          <small>
+            SECURE WORKSPACE
+          </small>
+
+          <span></span>
+
+        </div>
+
+
+        <div class="login-footer">
+
+          <p>
+            Don't have a LeadHelp account?
+          </p>
+
+          <a href="/">
+            Return to LeadHelp
+          </a>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>

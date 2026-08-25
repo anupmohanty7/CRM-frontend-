@@ -1,0 +1,364 @@
+<div class="customer-details-page">
+
+  <!-- LOADING -->
+
+  <div
+    class="loading-state"
+    *ngIf="isLoading"
+  >
+
+    <div class="loading-spinner"></div>
+
+    <p>
+      Loading customer details...
+    </p>
+
+  </div>
+
+
+  <!-- ERROR -->
+
+  <div
+    class="error-state"
+    *ngIf="!isLoading && errorMessage"
+  >
+
+    <h3>
+      Something went wrong
+    </h3>
+
+    <p>
+      {{ errorMessage }}
+    </p>
+
+    <button
+      type="button"
+      (click)="loadCustomer()"
+    >
+      Try Again
+    </button>
+
+  </div>
+
+
+  <!-- DETAILS -->
+
+  <ng-container
+    *ngIf="!isLoading && customer"
+  >
+
+    <!-- PAGE HEADER -->
+
+    <div class="page-header">
+
+      <button
+        type="button"
+        class="back-button"
+        (click)="goBack()"
+      >
+        ← Back to Customers
+      </button>
+
+
+      <div class="header-main">
+
+        <div class="customer-avatar">
+          {{ getInitials() }}
+        </div>
+
+        <div class="header-info">
+
+          <span class="eyebrow">
+            CUSTOMER DETAILS
+          </span>
+
+          <h1>
+            {{ getCustomerName() }}
+          </h1>
+
+          <p>
+            {{ customer.company || 'No company specified' }}
+          </p>
+
+        </div>
+
+
+        <!-- ACTIONS -->
+
+        <div class="header-actions">
+
+          <button
+            type="button"
+            class="edit-button"
+            (click)="editCustomer()"
+          >
+            Edit
+          </button>
+
+          <button
+            type="button"
+            class="delete-button"
+            (click)="deleteCustomer()"
+            [disabled]="isDeleting"
+          >
+            {{
+              isDeleting
+                ? 'Deleting...'
+                : 'Delete'
+            }}
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- ERROR AFTER ACTION -->
+
+    <div
+      class="error-state action-error"
+      *ngIf="errorMessage"
+    >
+
+      <p>
+        {{ errorMessage }}
+      </p>
+
+    </div>
+
+
+    <!-- CUSTOMER INFORMATION -->
+
+    <div class="details-grid">
+
+
+      <!-- CONTACT INFORMATION -->
+
+      <div class="details-card">
+
+        <div class="card-header">
+
+          <h2>
+            Contact Information
+          </h2>
+
+        </div>
+
+        <div class="info-list">
+
+          <div class="info-item">
+
+            <span class="info-label">
+              Email
+            </span>
+
+            <span class="info-value">
+              {{ customer.email || '-' }}
+            </span>
+
+          </div>
+
+
+          <div class="info-item">
+
+            <span class="info-label">
+              Phone
+            </span>
+
+            <span class="info-value">
+              {{ customer.phone || '-' }}
+            </span>
+
+          </div>
+
+
+          <div class="info-item">
+
+            <span class="info-label">
+              Company
+            </span>
+
+            <span class="info-value">
+              {{ customer.company || '-' }}
+            </span>
+
+          </div>
+
+
+          <div class="info-item">
+
+            <span class="info-label">
+              Address
+            </span>
+
+            <span class="info-value">
+              {{ customer.address || '-' }}
+            </span>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- CRM INFORMATION -->
+
+      <div class="details-card">
+
+        <div class="card-header">
+
+          <h2>
+            CRM Information
+          </h2>
+
+        </div>
+
+        <div class="info-list">
+
+          <div class="info-item">
+
+            <span class="info-label">
+              Type
+            </span>
+
+            <span
+              class="badge"
+              [class.lead-badge]="
+                customer.customerType?.toLowerCase() === 'lead'
+              "
+            >
+              {{
+                customer.customerType?.toLowerCase() === 'lead'
+                  ? 'Lead'
+                  : 'Customer'
+              }}
+            </span>
+
+          </div>
+
+
+          <div class="info-item">
+
+            <span class="info-label">
+              Status
+            </span>
+
+            <span class="badge status-badge">
+              {{ customer.status || '-' }}
+            </span>
+
+          </div>
+
+
+          <div
+            class="info-item"
+            *ngIf="
+              customer.customerType?.toLowerCase() === 'lead'
+            "
+          >
+
+            <span class="info-label">
+              Lead Status
+            </span>
+
+            <span class="info-value">
+              {{ customer.leadStatus || '-' }}
+            </span>
+
+          </div>
+
+
+          <div
+            class="info-item"
+            *ngIf="
+              customer.customerType?.toLowerCase() === 'lead'
+            "
+          >
+
+            <span class="info-label">
+              Lead Source
+            </span>
+
+            <span class="info-value">
+              {{ customer.leadSource || '-' }}
+            </span>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- RECORD INFORMATION -->
+
+      <div class="details-card">
+
+        <div class="card-header">
+
+          <h2>
+            Record Information
+          </h2>
+
+        </div>
+
+        <div class="info-list">
+
+          <div class="info-item">
+
+            <span class="info-label">
+              Customer ID
+            </span>
+
+            <span class="info-value">
+              #{{ customer.id }}
+            </span>
+
+          </div>
+
+
+          <div class="info-item">
+
+            <span class="info-label">
+              Created
+            </span>
+
+            <span class="info-value">
+              {{
+                customer.createdAt
+                  ? (customer.createdAt | date:'dd MMM yyyy')
+                  : '-'
+              }}
+            </span>
+
+          </div>
+
+
+          <div class="info-item">
+
+            <span class="info-label">
+              Last Updated
+            </span>
+
+            <span class="info-value">
+              {{
+                customer.updatedAt
+                  ? (customer.updatedAt | date:'dd MMM yyyy')
+                  : '-'
+              }}
+            </span>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </ng-container>
+
+</div>

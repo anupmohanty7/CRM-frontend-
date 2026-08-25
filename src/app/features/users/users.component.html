@@ -1,0 +1,871 @@
+<div class="users-page">
+
+  <div class="page-header">
+
+    <div>
+      <p class="eyebrow">Administration</p>
+
+      <h1>User Management</h1>
+
+      <p class="page-description">
+        Manage CRM users, access roles, and account status.
+      </p>
+    </div>
+
+    <button
+      class="primary-btn"
+      type="button"
+      (click)="openAddUser()">
+
+      <span class="plus">+</span>
+
+      Add User
+
+    </button>
+
+  </div>
+
+
+  <!-- Success message -->
+
+  <div
+    class="message success"
+    *ngIf="successMessage">
+
+    <span>
+      {{ successMessage }}
+    </span>
+
+    <button
+      type="button"
+      (click)="successMessage = ''">
+
+      ×
+
+    </button>
+
+  </div>
+
+
+  <!-- Error message -->
+
+  <div
+    class="message error"
+    *ngIf="errorMessage">
+
+    <span>
+      {{ errorMessage }}
+    </span>
+
+    <button
+      type="button"
+      (click)="errorMessage = ''">
+
+      ×
+
+    </button>
+
+  </div>
+
+
+  <!-- Filters -->
+
+  <section class="toolbar">
+
+    <div class="search-box">
+
+      <span class="search-icon">⌕</span>
+
+      <input
+        type="text"
+        placeholder="Search by name or email..."
+        [(ngModel)]="searchTerm"
+        (input)="applyFilters()">
+
+    </div>
+
+
+    <select
+      [(ngModel)]="roleFilter"
+      (change)="applyFilters()">
+
+      <option value="ALL">
+        All roles
+      </option>
+
+      <option
+        *ngFor="let role of roles"
+        [value]="role">
+
+        {{ role }}
+
+      </option>
+
+    </select>
+
+
+    <select
+      [(ngModel)]="statusFilter"
+      (change)="applyFilters()">
+
+      <option value="ALL">
+        All statuses
+      </option>
+
+      <option
+        *ngFor="let status of statuses"
+        [value]="status">
+
+        {{ status }}
+
+      </option>
+
+    </select>
+
+  </section>
+
+
+  <!-- Loading -->
+
+  <div
+    class="state-card"
+    *ngIf="loading">
+
+    <div class="loader"></div>
+
+    <p>
+      Loading users...
+    </p>
+
+  </div>
+
+
+  <!-- Empty -->
+
+  <div
+    class="state-card"
+    *ngIf="!loading && filteredUsers.length === 0">
+
+    <div class="empty-icon">
+      ◎
+    </div>
+
+    <h3>
+      No users found
+    </h3>
+
+    <p>
+      Try changing your search or filters,
+      or create a new user.
+    </p>
+
+  </div>
+
+
+  <!-- Users table -->
+
+  <section
+    class="users-card"
+    *ngIf="!loading && filteredUsers.length > 0">
+
+    <div class="table-header">
+
+      <div>
+
+        <span class="table-title">
+          Users
+        </span>
+
+        <span class="user-count">
+          {{ filteredUsers.length }}
+        </span>
+
+      </div>
+
+    </div>
+
+
+    <div class="table-wrapper">
+
+      <table>
+
+        <thead>
+
+          <tr>
+
+            <th>
+              User
+            </th>
+
+            <th>
+              Email
+            </th>
+
+            <th>
+              Role
+            </th>
+
+            <th>
+              Status
+            </th>
+
+            <th class="actions-heading">
+              Actions
+            </th>
+
+          </tr>
+
+        </thead>
+
+
+        <tbody>
+
+          <tr
+            *ngFor="let user of filteredUsers">
+
+            <td>
+
+              <div class="user-cell">
+
+                <div class="avatar">
+                  {{ getInitials(user) }}
+                </div>
+
+                <div>
+
+                  <div class="user-name">
+                    {{ getFullName(user) }}
+                  </div>
+
+                  <div class="user-id">
+                    ID #{{ user.id }}
+                  </div>
+
+                </div>
+
+              </div>
+
+            </td>
+
+
+            <td>
+
+              <span class="email">
+                {{ user.email }}
+              </span>
+
+            </td>
+
+
+            <td>
+
+              <span class="role-badge">
+                {{ user.role }}
+              </span>
+
+            </td>
+
+
+            <td>
+
+              <span
+                class="status-badge"
+                [ngClass]="user.status.toLowerCase()">
+
+                <span class="status-dot"></span>
+
+                {{ user.status }}
+
+              </span>
+
+            </td>
+
+
+            <td>
+
+              <div class="actions">
+
+                <button
+                  type="button"
+                  class="action-btn"
+                  (click)="openEditUser(user)">
+
+                  Edit
+
+                </button>
+
+                <button
+                  type="button"
+                  class="action-btn"
+                  (click)="openRoleModal(user)">
+
+                  Role
+
+                </button>
+
+                <button
+                  type="button"
+                  class="action-btn"
+                  (click)="openStatusModal(user)">
+
+                  Status
+
+                </button>
+
+                <button
+                  type="button"
+                  class="action-btn danger-text"
+                  (click)="openDeleteModal(user)">
+
+                  Delete
+
+                </button>
+
+              </div>
+
+            </td>
+
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </section>
+
+
+  <!-- Add / Edit User Modal -->
+
+  <div
+    class="modal-backdrop"
+    *ngIf="showForm"
+    (click)="closeForm()">
+
+    <div
+      class="modal"
+      (click)="$event.stopPropagation()">
+
+      <div class="modal-header">
+
+        <div>
+
+          <p class="eyebrow">
+            {{ editingUser ? 'User details' : 'New account' }}
+          </p>
+
+          <h2>
+            {{ editingUser ? 'Edit User' : 'Add User' }}
+          </h2>
+
+        </div>
+
+        <button
+          type="button"
+          class="close-btn"
+          (click)="closeForm()">
+
+          ×
+
+        </button>
+
+      </div>
+
+
+      <!-- CREATE USER -->
+
+      <form
+        *ngIf="!editingUser"
+        (ngSubmit)="createUser()">
+
+        <div class="form-grid">
+
+          <div class="field">
+
+            <label>
+              First name *
+            </label>
+
+            <input
+              type="text"
+              name="firstName"
+              [(ngModel)]="formData.firstName"
+              placeholder="Enter first name">
+
+          </div>
+
+
+          <div class="field">
+
+            <label>
+              Last name
+            </label>
+
+            <input
+              type="text"
+              name="lastName"
+              [(ngModel)]="formData.lastName"
+              placeholder="Enter last name">
+
+          </div>
+
+        </div>
+
+
+        <div class="field">
+
+          <label>
+            Email *
+          </label>
+
+          <input
+            type="email"
+            name="email"
+            [(ngModel)]="formData.email"
+            placeholder="user@example.com">
+
+        </div>
+
+
+        <!-- Password -->
+
+        <div class="field">
+
+          <label>
+            Password *
+          </label>
+
+          <div class="password-wrapper">
+
+            <input
+              [type]="showPassword ? 'text' : 'password'"
+              name="password"
+              [(ngModel)]="formData.password"
+              placeholder="Enter password">
+
+            <button
+              type="button"
+              class="password-toggle"
+              (click)="togglePasswordVisibility()"
+              [attr.aria-label]="showPassword ? 'Hide password' : 'Show password'">
+
+              <span *ngIf="!showPassword">
+                ◉
+              </span>
+
+              <span *ngIf="showPassword">
+                ◉
+              </span>
+
+            </button>
+
+          </div>
+
+          <small>
+            Minimum 8 characters with uppercase, lowercase,
+            number and special character.
+          </small>
+
+        </div>
+
+
+        <div class="field">
+
+          <label>
+            Role *
+          </label>
+
+          <select
+            name="role"
+            [(ngModel)]="formData.role">
+
+            <option
+              *ngFor="let role of roles"
+              [value]="role">
+
+              {{ role }}
+
+            </option>
+
+          </select>
+
+        </div>
+
+
+        <div class="modal-footer">
+
+          <button
+            type="button"
+            class="secondary-btn"
+            (click)="closeForm()">
+
+            Cancel
+
+          </button>
+
+          <button
+            type="submit"
+            class="primary-btn"
+            [disabled]="saving">
+
+            {{ saving ? 'Creating...' : 'Create User' }}
+
+          </button>
+
+        </div>
+
+      </form>
+
+
+      <!-- EDIT USER -->
+
+      <form
+        *ngIf="editingUser"
+        (ngSubmit)="updateUser()">
+
+        <div class="form-grid">
+
+          <div class="field">
+
+            <label>
+              First name *
+            </label>
+
+            <input
+              type="text"
+              name="editFirstName"
+              [(ngModel)]="updateData.firstName"
+              placeholder="Enter first name">
+
+          </div>
+
+
+          <div class="field">
+
+            <label>
+              Last name
+            </label>
+
+            <input
+              type="text"
+              name="editLastName"
+              [(ngModel)]="updateData.lastName"
+              placeholder="Enter last name">
+
+          </div>
+
+        </div>
+
+
+        <div class="field">
+
+          <label>
+            Email *
+          </label>
+
+          <input
+            type="email"
+            name="editEmail"
+            [(ngModel)]="updateData.email"
+            placeholder="user@example.com">
+
+        </div>
+
+
+        <div class="edit-note">
+
+          Password, role and status are managed separately.
+
+        </div>
+
+
+        <div class="modal-footer">
+
+          <button
+            type="button"
+            class="secondary-btn"
+            (click)="closeForm()">
+
+            Cancel
+
+          </button>
+
+          <button
+            type="submit"
+            class="primary-btn"
+            [disabled]="saving">
+
+            {{ saving ? 'Saving...' : 'Save Changes' }}
+
+          </button>
+
+        </div>
+
+      </form>
+
+    </div>
+
+  </div>
+
+
+  <!-- ROLE MODAL -->
+
+  <div
+    class="modal-backdrop"
+    *ngIf="selectedUser && activeModal === 'role'"
+    (click)="closeActionModal()">
+
+    <div
+      class="small-modal"
+      (click)="$event.stopPropagation()">
+
+      <div class="modal-header">
+
+        <div>
+
+          <p class="eyebrow">
+            Access control
+          </p>
+
+          <h2>
+            Change Role
+          </h2>
+
+        </div>
+
+        <button
+          type="button"
+          class="close-btn"
+          (click)="closeActionModal()">
+
+          ×
+
+        </button>
+
+      </div>
+
+
+      <div class="modal-user">
+
+        <strong>
+          {{ getFullName(selectedUser) }}
+        </strong>
+
+        <span>
+          {{ selectedUser.email }}
+        </span>
+
+      </div>
+
+
+      <div class="field">
+
+        <label>
+          Role
+        </label>
+
+        <select
+          [(ngModel)]="selectedRole">
+
+          <option
+            *ngFor="let role of roles"
+            [value]="role">
+
+            {{ role }}
+
+          </option>
+
+        </select>
+
+      </div>
+
+
+      <div class="modal-footer">
+
+        <button
+          type="button"
+          class="secondary-btn"
+          (click)="closeActionModal()">
+
+          Cancel
+
+        </button>
+
+        <button
+          type="button"
+          class="primary-btn"
+          [disabled]="saving"
+          (click)="changeRole()">
+
+          {{ saving ? 'Updating...' : 'Update Role' }}
+
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- STATUS MODAL -->
+
+  <div
+    class="modal-backdrop"
+    *ngIf="selectedUser && activeModal === 'status'"
+    (click)="closeActionModal()">
+
+    <div
+      class="small-modal"
+      (click)="$event.stopPropagation()">
+
+      <div class="modal-header">
+
+        <div>
+
+          <p class="eyebrow">
+            Account control
+          </p>
+
+          <h2>
+            Change Status
+          </h2>
+
+        </div>
+
+        <button
+          type="button"
+          class="close-btn"
+          (click)="closeActionModal()">
+
+          ×
+
+        </button>
+
+      </div>
+
+
+      <div class="modal-user">
+
+        <strong>
+          {{ getFullName(selectedUser) }}
+        </strong>
+
+        <span>
+          {{ selectedUser.email }}
+        </span>
+
+      </div>
+
+
+      <div class="field">
+
+        <label>
+          Status
+        </label>
+
+        <select
+          [(ngModel)]="selectedStatus">
+
+          <option
+            *ngFor="let status of statuses"
+            [value]="status">
+
+            {{ status }}
+
+          </option>
+
+        </select>
+
+      </div>
+
+
+      <div class="modal-footer">
+
+        <button
+          type="button"
+          class="secondary-btn"
+          (click)="closeActionModal()">
+
+          Cancel
+
+        </button>
+
+        <button
+          type="button"
+          class="primary-btn"
+          [disabled]="saving"
+          (click)="changeStatus()">
+
+          {{ saving ? 'Updating...' : 'Update Status' }}
+
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- DELETE MODAL -->
+
+  <div
+    class="modal-backdrop"
+    *ngIf="showDeleteModal"
+    (click)="closeDeleteModal()">
+
+    <div
+      class="small-modal delete-modal"
+      (click)="$event.stopPropagation()">
+
+      <div class="delete-icon">
+        !
+      </div>
+
+      <h2>
+        Delete User?
+      </h2>
+
+      <p>
+        You are about to permanently delete
+
+        <strong *ngIf="selectedUser">
+          {{ getFullName(selectedUser) }}
+        </strong>.
+      </p>
+
+      <p class="warning-text">
+        This action cannot be undone.
+      </p>
+
+
+      <div class="modal-footer">
+
+        <button
+          type="button"
+          class="secondary-btn"
+          (click)="closeDeleteModal()">
+
+          Cancel
+
+        </button>
+
+        <button
+          type="button"
+          class="delete-btn"
+          [disabled]="saving"
+          (click)="deleteUser()">
+
+          {{ saving ? 'Deleting...' : 'Delete User' }}
+
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

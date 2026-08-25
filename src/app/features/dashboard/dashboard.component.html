@@ -1,0 +1,405 @@
+<div class="dashboard-page">
+
+  <!-- HEADER -->
+
+  <div class="dashboard-header">
+
+    <div>
+      <span class="eyebrow">OVERVIEW</span>
+
+      <h1>Dashboard</h1>
+
+      <p>
+        Monitor your customers, leads and follow-ups.
+      </p>
+    </div>
+
+    <button
+      type="button"
+      class="refresh-button"
+      (click)="refreshDashboard()"
+      [disabled]="loading"
+    >
+      <span>↻</span>
+      Refresh
+    </button>
+
+  </div>
+
+
+  <!-- ERROR -->
+
+  <div
+    *ngIf="errorMessage"
+    class="error-message"
+  >
+    <span>{{ errorMessage }}</span>
+
+    <button
+      type="button"
+      (click)="refreshDashboard()"
+    >
+      Try Again
+    </button>
+  </div>
+
+
+  <!-- LOADING -->
+
+  <div
+    *ngIf="loading"
+    class="loading-container"
+  >
+
+    <div class="loader"></div>
+
+    <p>Loading dashboard...</p>
+
+  </div>
+
+
+  <!-- DASHBOARD CONTENT -->
+
+  <div
+    *ngIf="!loading && dashboard"
+    class="dashboard-content"
+  >
+
+
+    <!-- TOP STAT CARDS -->
+
+    <div class="stats-grid">
+
+      <!-- Total Customers -->
+
+      <div class="stat-card">
+
+        <div class="stat-card-top">
+
+          <div class="stat-icon customer-icon">
+            ◉
+          </div>
+
+          <span class="stat-label">
+            TOTAL CUSTOMERS
+          </span>
+
+        </div>
+
+        <div class="stat-value">
+          {{ dashboard.totalCustomers }}
+        </div>
+
+        <div class="stat-description">
+          All customer and lead records
+        </div>
+
+      </div>
+
+
+      <!-- Total Leads -->
+
+      <div class="stat-card">
+
+        <div class="stat-card-top">
+
+          <div class="stat-icon lead-icon">
+            ◇
+          </div>
+
+          <span class="stat-label">
+            TOTAL LEADS
+          </span>
+
+        </div>
+
+        <div class="stat-value">
+          {{ dashboard.totalLeads }}
+        </div>
+
+        <div class="stat-description">
+          Active lead records
+        </div>
+
+      </div>
+
+
+      <!-- Actual Customers -->
+
+      <div class="stat-card">
+
+        <div class="stat-card-top">
+
+          <div class="stat-icon actual-customer-icon">
+            ◎
+          </div>
+
+          <span class="stat-label">
+            ACTUAL CUSTOMERS
+          </span>
+
+        </div>
+
+        <div class="stat-value">
+          {{ dashboard.totalActualCustomers }}
+        </div>
+
+        <div class="stat-description">
+          Converted customer records
+        </div>
+
+      </div>
+
+
+      <!-- Pending Follow-ups -->
+
+      <div class="stat-card">
+
+        <div class="stat-card-top">
+
+          <div class="stat-icon followup-icon">
+            ◷
+          </div>
+
+          <span class="stat-label">
+            PENDING FOLLOW-UPS
+          </span>
+
+        </div>
+
+        <div class="stat-value">
+          {{ dashboard.pendingFollowUps }}
+        </div>
+
+        <div class="stat-description">
+          Follow-ups awaiting action
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- CHARTS -->
+
+    <div class="charts-grid">
+
+
+      <!-- Lead Chart -->
+
+      <div class="chart-card">
+
+        <div class="chart-header">
+
+          <div>
+            <span class="chart-eyebrow">
+              LEAD PIPELINE
+            </span>
+
+            <h2>
+              Lead Status
+            </h2>
+          </div>
+
+        </div>
+
+        <div class="chart-container">
+          <canvas id="leadChart"></canvas>
+        </div>
+
+      </div>
+
+
+      <!-- Follow-up Chart -->
+
+      <div class="chart-card">
+
+        <div class="chart-header">
+
+          <div>
+            <span class="chart-eyebrow">
+              FOLLOW-UPS
+            </span>
+
+            <h2>
+              Follow-up Status
+            </h2>
+          </div>
+
+        </div>
+
+        <div class="chart-container doughnut-container">
+          <canvas id="followUpChart"></canvas>
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- DETAILED STATISTICS -->
+
+    <div class="details-card">
+
+      <div class="details-header">
+
+        <div>
+          <span class="chart-eyebrow">
+            DETAILS
+          </span>
+
+          <h2>
+            CRM Statistics
+          </h2>
+        </div>
+
+      </div>
+
+
+      <div class="details-grid">
+
+
+        <!-- NEW LEADS -->
+
+        <div class="detail-item">
+
+          <div class="detail-icon">
+            N
+          </div>
+
+          <div class="detail-content">
+
+            <span>
+              New Leads
+            </span>
+
+            <strong>
+              {{ dashboard.newLeads }}
+            </strong>
+
+          </div>
+
+        </div>
+
+
+        <!-- QUALIFIED -->
+
+        <div class="detail-item">
+
+          <div class="detail-icon">
+            Q
+          </div>
+
+          <div class="detail-content">
+
+            <span>
+              Qualified Leads
+            </span>
+
+            <strong>
+              {{ dashboard.qualifiedLeads }}
+            </strong>
+
+          </div>
+
+        </div>
+
+
+        <!-- CONVERTED -->
+
+        <div class="detail-item">
+
+          <div class="detail-icon">
+            C
+          </div>
+
+          <div class="detail-content">
+
+            <span>
+              Converted Leads
+            </span>
+
+            <strong>
+              {{ dashboard.convertedLeads }}
+            </strong>
+
+          </div>
+
+        </div>
+
+
+        <!-- LOST -->
+
+        <div class="detail-item">
+
+          <div class="detail-icon">
+            L
+          </div>
+
+          <div class="detail-content">
+
+            <span>
+              Lost Leads
+            </span>
+
+            <strong>
+              {{ dashboard.lostLeads }}
+            </strong>
+
+          </div>
+
+        </div>
+
+
+        <!-- SUCCESSFUL FOLLOW-UPS -->
+
+        <div class="detail-item">
+
+          <div class="detail-icon">
+            ✓
+          </div>
+
+          <div class="detail-content">
+
+            <span>
+              Successful Follow-ups
+            </span>
+
+            <strong>
+              {{ dashboard.successfulFollowUps }}
+            </strong>
+
+          </div>
+
+        </div>
+
+
+        <!-- FAILED FOLLOW-UPS -->
+
+        <div class="detail-item">
+
+          <div class="detail-icon">
+            ×
+          </div>
+
+          <div class="detail-content">
+
+            <span>
+              Failed Follow-ups
+            </span>
+
+            <strong>
+              {{ dashboard.failedFollowUps }}
+            </strong>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

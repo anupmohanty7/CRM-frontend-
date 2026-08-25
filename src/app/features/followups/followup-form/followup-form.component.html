@@ -1,0 +1,258 @@
+<div class="followup-form-page">
+
+  <div class="page-header">
+
+    <div>
+      <span class="eyebrow">
+        CUSTOMER RELATIONSHIP
+      </span>
+
+      <h1>
+        {{ isEditMode ? 'Edit Follow-Up' : 'Add Follow-Up' }}
+      </h1>
+
+      <p>
+        {{ isEditMode
+          ? 'Update the follow-up activity details.'
+          : 'Schedule a new customer follow-up activity.'
+        }}
+      </p>
+    </div>
+
+    <a
+      routerLink="/followups"
+      class="back-button"
+    >
+      ← Back to Follow-Ups
+    </a>
+
+  </div>
+
+
+  <!-- ERROR -->
+
+  <div
+    *ngIf="errorMessage"
+    class="error-message"
+  >
+    {{ errorMessage }}
+  </div>
+
+
+  <!-- LOADING -->
+
+  <div
+    *ngIf="isLoading"
+    class="loading-state"
+  >
+    <div class="loading-spinner"></div>
+
+    <p>
+      Loading follow-up...
+    </p>
+  </div>
+
+
+  <!-- FORM -->
+
+  <form
+    *ngIf="!isLoading"
+    class="form-card"
+    (ngSubmit)="submit()"
+  >
+
+    <div class="form-section">
+
+      <div class="section-heading">
+
+        <span class="section-number">
+          01
+        </span>
+
+        <div>
+          <h2>
+            Follow-Up Information
+          </h2>
+
+          <p>
+            Select the customer and schedule the activity.
+          </p>
+        </div>
+
+      </div>
+
+
+      <div class="form-grid">
+
+        <!-- CUSTOMER -->
+
+        <div class="form-group full-width">
+
+          <label for="customer">
+            Customer
+          </label>
+
+          <select
+            id="customer"
+            name="customerId"
+            [(ngModel)]="form.customerId"
+            required
+          >
+
+            <option
+              value=""
+              disabled
+            >
+              Select a customer
+            </option>
+
+            <option
+              *ngFor="let customer of customers"
+              [value]="customer.id"
+            >
+              {{ customer.firstname }}
+              {{ customer.lastname }}
+
+              <span *ngIf="customer.company">
+                — {{ customer.company }}
+              </span>
+            </option>
+
+          </select>
+
+        </div>
+
+
+        <!-- DATE -->
+
+        <div class="form-group">
+
+          <label for="followUpDateTime">
+            Date & Time
+          </label>
+
+          <input
+            id="followUpDateTime"
+            name="followUpDateTime"
+            type="datetime-local"
+            [(ngModel)]="form.followUpDateTime"
+            required
+          />
+
+        </div>
+
+
+        <!-- STATUS -->
+
+        <div class="form-group">
+
+          <label for="status">
+            Status
+          </label>
+
+          <select
+            id="status"
+            name="status"
+            [(ngModel)]="form.status"
+            required
+          >
+
+            <option value="PENDING">
+              Pending
+            </option>
+
+            <option value="SUCCESS_CLOSED">
+              Successful
+            </option>
+
+            <option value="FAILED_CLOSED">
+              Failed
+            </option>
+
+          </select>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- NOTES -->
+
+    <div class="form-section">
+
+      <div class="section-heading">
+
+        <span class="section-number">
+          02
+        </span>
+
+        <div>
+          <h2>
+            Notes
+          </h2>
+
+          <p>
+            Add any information related to this follow-up.
+          </p>
+        </div>
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label for="notes">
+          Follow-Up Notes
+        </label>
+
+        <textarea
+          id="notes"
+          name="notes"
+          [(ngModel)]="form.notes"
+          rows="6"
+          placeholder="Enter follow-up notes..."
+        ></textarea>
+
+      </div>
+
+    </div>
+
+
+    <!-- ACTIONS -->
+
+    <div class="form-actions">
+
+      <button
+        type="button"
+        class="cancel-button"
+        (click)="cancel()"
+      >
+        Cancel
+      </button>
+
+      <button
+        type="submit"
+        class="submit-button"
+        [disabled]="isSaving"
+      >
+
+        <span *ngIf="!isSaving">
+          {{ isEditMode
+            ? 'Update Follow-Up'
+            : 'Create Follow-Up'
+          }}
+        </span>
+
+        <span *ngIf="isSaving">
+          Saving...
+        </span>
+
+      </button>
+
+    </div>
+
+  </form>
+
+</div>

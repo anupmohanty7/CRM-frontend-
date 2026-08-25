@@ -1,0 +1,440 @@
+<div class="followups-page">
+
+  <!-- =========================
+       PAGE HEADER
+  ========================== -->
+
+  <div class="page-header">
+
+    <div class="page-heading">
+
+      <span class="eyebrow">
+        CUSTOMER RELATIONSHIP
+      </span>
+
+      <h1>
+        Follow-Ups
+      </h1>
+
+      <p>
+        Track and manage your customer follow-up activities.
+      </p>
+
+    </div>
+
+    <a
+      routerLink="/followups/add"
+      class="add-followup-button"
+    >
+      + Add Follow-Up
+    </a>
+
+  </div>
+
+
+  <!-- =========================
+       ERROR
+  ========================== -->
+
+  <div
+    *ngIf="errorMessage"
+    class="error-state"
+  >
+
+    <div class="error-content">
+
+      <h3>
+        Something went wrong
+      </h3>
+
+      <p>
+        {{ errorMessage }}
+      </p>
+
+      <button
+        type="button"
+        (click)="loadFollowUps()"
+      >
+        Try Again
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <!-- =========================
+       SUMMARY
+  ========================== -->
+
+  <div
+    *ngIf="!isLoading"
+    class="summary-grid"
+  >
+
+    <div class="summary-card">
+
+      <span class="summary-label">
+        Total Follow-Ups
+      </span>
+
+      <strong>
+        {{ totalFollowUps }}
+      </strong>
+
+      <span class="summary-description">
+        All scheduled activities
+      </span>
+
+    </div>
+
+
+    <div class="summary-card">
+
+      <span class="summary-label">
+        Pending
+      </span>
+
+      <strong>
+        {{ pendingFollowUps }}
+      </strong>
+
+      <span class="summary-description">
+        Awaiting completion
+      </span>
+
+    </div>
+
+
+    <div class="summary-card">
+
+      <span class="summary-label">
+        Successful
+      </span>
+
+      <strong>
+        {{ successfulFollowUps }}
+      </strong>
+
+      <span class="summary-description">
+        Successfully closed
+      </span>
+
+    </div>
+
+
+    <div class="summary-card">
+
+      <span class="summary-label">
+        Failed
+      </span>
+
+      <strong>
+        {{ failedFollowUps }}
+      </strong>
+
+      <span class="summary-description">
+        Unsuccessful follow-ups
+      </span>
+
+    </div>
+
+  </div>
+
+
+  <!-- =========================
+       FILTER BAR
+  ========================== -->
+
+  <div
+    *ngIf="!isLoading"
+    class="filter-bar"
+  >
+
+    <div class="search-container">
+
+      <span class="search-icon">
+        ⌕
+      </span>
+
+      <input
+        type="text"
+        [(ngModel)]="searchTerm"
+        placeholder="Search customer, email or notes..."
+      />
+
+    </div>
+
+
+    <div class="filter-container">
+
+      <select
+        [(ngModel)]="selectedStatus"
+      >
+
+        <option value="all">
+          All Status
+        </option>
+
+        <option value="PENDING">
+          Pending
+        </option>
+
+        <option value="SUCCESS_CLOSED">
+          Successful
+        </option>
+
+        <option value="FAILED_CLOSED">
+          Failed
+        </option>
+
+      </select>
+
+    </div>
+
+  </div>
+
+
+  <!-- =========================
+       LOADING
+  ========================== -->
+
+  <div
+    *ngIf="isLoading"
+    class="loading-state"
+  >
+
+    <div class="loading-spinner"></div>
+
+    <p>
+      Loading follow-ups...
+    </p>
+
+  </div>
+
+
+  <!-- =========================
+       TABLE
+  ========================== -->
+
+  <div
+    *ngIf="!isLoading"
+    class="table-card"
+  >
+
+    <div class="table-header">
+
+      <div>
+
+        <h2>
+          Follow-Up Activities
+        </h2>
+
+        <p>
+          {{ filteredFollowUps.length }}
+          follow-ups found
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <div class="table-wrapper">
+
+      <table>
+
+        <thead>
+
+          <tr>
+
+            <th>
+              Customer
+            </th>
+
+            <th>
+              Date & Time
+            </th>
+
+            <th>
+              Status
+            </th>
+
+            <th>
+              Notes
+            </th>
+
+            <th>
+              Actions
+            </th>
+
+          </tr>
+
+        </thead>
+
+
+        <tbody>
+
+          <tr
+            *ngFor="let followUp of filteredFollowUps"
+          >
+
+            <!-- CUSTOMER -->
+
+            <td>
+
+              <div class="customer-cell">
+
+                <div class="customer-avatar">
+
+                  {{
+                    getCustomerName(followUp)
+                      .charAt(0)
+                      .toUpperCase()
+                  }}
+
+                </div>
+
+                <div class="customer-info">
+
+                  <div class="customer-name">
+                    {{ getCustomerName(followUp) }}
+                  </div>
+
+                  <div class="secondary-text">
+
+                    {{ followUp.customer?.email || '-' }}
+
+                  </div>
+
+                </div>
+
+              </div>
+
+            </td>
+
+
+            <!-- DATE -->
+
+            <td>
+
+              {{ formatDateTime(
+                followUp.followUpDateTime
+              ) }}
+
+            </td>
+
+
+            <!-- STATUS -->
+
+            <td>
+
+              <span
+                class="status-badge"
+                [ngClass]="
+                  getStatusClass(followUp.status)
+                "
+              >
+
+                {{ formatStatus(
+                  followUp.status
+                ) }}
+
+              </span>
+
+            </td>
+
+
+            <!-- NOTES -->
+
+            <td>
+
+              <span
+                class="notes-text"
+                [title]="followUp.notes || ''"
+              >
+
+                {{
+                  followUp.notes
+                    ? followUp.notes
+                    : '-'
+                }}
+
+              </span>
+
+            </td>
+
+
+            <!-- ACTIONS -->
+
+            <td>
+
+              <div class="actions">
+
+                <a
+                  [routerLink]="[
+                    '/followups',
+                    followUp.id,
+                    'edit'
+                  ]"
+                  class="edit-button"
+                >
+                  Edit
+                </a>
+
+                <button
+                  type="button"
+                  class="delete-button"
+                  [disabled]="isDeleting"
+                  (click)="deleteFollowUp(followUp)"
+                >
+                  Delete
+                </button>
+
+              </div>
+
+            </td>
+
+          </tr>
+
+
+          <!-- EMPTY -->
+
+          <tr
+            *ngIf="filteredFollowUps.length === 0"
+          >
+
+            <td
+              colspan="5"
+              class="empty-cell"
+            >
+
+              <div class="empty-state">
+
+                <div class="empty-icon">
+                  ◷
+                </div>
+
+                <h3>
+                  No follow-ups found
+                </h3>
+
+                <p>
+                  Try changing your search or filter.
+                </p>
+
+              </div>
+
+            </td>
+
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
+</div>

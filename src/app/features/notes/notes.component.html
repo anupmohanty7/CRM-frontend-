@@ -1,0 +1,310 @@
+<div class="notes-page">
+
+  <!-- HEADER -->
+
+  <div class="page-header">
+
+    <div class="page-heading">
+
+      <span class="eyebrow">
+        CUSTOMER RELATIONSHIP
+      </span>
+
+      <h1>Notes</h1>
+
+      <p>
+        Keep track of important customer information and conversations.
+      </p>
+
+    </div>
+
+    <a
+      routerLink="/notes/new"
+      class="add-note-button"
+    >
+      + Add Note
+    </a>
+
+  </div>
+
+
+  <!-- SUMMARY -->
+
+  <div class="summary-grid">
+
+    <div class="summary-card">
+
+      <span class="summary-label">
+        Total Notes
+      </span>
+
+      <strong>
+        {{ totalNotes }}
+      </strong>
+
+      <span class="summary-description">
+        All recorded notes
+      </span>
+
+    </div>
+
+  </div>
+
+
+  <!-- SEARCH -->
+
+  <div class="filter-bar">
+
+    <div class="search-container">
+
+      <span class="search-icon">
+        ⌕
+      </span>
+
+      <input
+        type="text"
+        placeholder="Search notes, customers, email or company..."
+        [(ngModel)]="searchTerm"
+      >
+
+    </div>
+
+  </div>
+
+
+  <!-- ERROR -->
+
+  <div
+    class="error-state"
+    *ngIf="errorMessage"
+  >
+
+    <div class="error-content">
+
+      <h3>
+        Something went wrong
+      </h3>
+
+      <p>
+        {{ errorMessage }}
+      </p>
+
+      <button
+        type="button"
+        (click)="loadNotes()"
+      >
+        Try Again
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <!-- LOADING -->
+
+  <div
+    class="loading-state"
+    *ngIf="isLoading"
+  >
+
+    <div class="loading-spinner"></div>
+
+    <p>
+      Loading notes...
+    </p>
+
+  </div>
+
+
+  <!-- NOTES TABLE -->
+
+  <div
+    class="table-card"
+    *ngIf="!isLoading && !errorMessage"
+  >
+
+    <div class="table-header">
+
+      <div>
+
+        <h2>
+          Customer Notes
+        </h2>
+
+        <p>
+          {{ filteredNotes.length }} note(s) found
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <div class="table-wrapper">
+
+      <table
+        *ngIf="filteredNotes.length > 0"
+      >
+
+        <thead>
+
+          <tr>
+
+            <th>
+              Customer
+            </th>
+
+            <th>
+              Note
+            </th>
+
+            <th>
+              Created
+            </th>
+
+            <th>
+              Updated
+            </th>
+
+            <th>
+              Actions
+            </th>
+
+          </tr>
+
+        </thead>
+
+
+        <tbody>
+
+          <tr
+            *ngFor="let note of filteredNotes"
+          >
+
+            <!-- CUSTOMER -->
+
+            <td>
+
+              <div class="customer-cell">
+
+                <div class="customer-avatar">
+
+                  {{ getCustomerInitials(note) }}
+
+                </div>
+
+                <div class="customer-info">
+
+                  <div class="customer-name">
+
+                    {{ getCustomerName(note) }}
+
+                  </div>
+
+                  <div class="secondary-text">
+
+                    {{ note.customer?.email || 'No email' }}
+
+                  </div>
+
+                </div>
+
+              </div>
+
+            </td>
+
+
+            <!-- NOTE -->
+
+            <td>
+
+              <div class="note-preview">
+
+                {{ getPreview(note.content) }}
+
+              </div>
+
+            </td>
+
+
+            <!-- CREATED -->
+
+            <td>
+
+              {{ formatDate(note.createdAt) }}
+
+            </td>
+
+
+            <!-- UPDATED -->
+
+            <td>
+
+              {{ formatDate(note.updatedAt) }}
+
+            </td>
+
+
+            <!-- ACTIONS -->
+
+            <td>
+
+              <div class="action-buttons">
+
+                <a
+                  [routerLink]="['/notes/edit', note.id]"
+                  class="edit-button"
+                >
+                  Edit
+                </a>
+
+                <button
+                  type="button"
+                  class="delete-button"
+                  (click)="deleteNote(note)"
+                >
+                  Delete
+                </button>
+
+              </div>
+
+            </td>
+
+          </tr>
+
+        </tbody>
+
+      </table>
+
+
+      <!-- EMPTY -->
+
+      <div
+        class="empty-state"
+        *ngIf="filteredNotes.length === 0"
+      >
+
+        <div class="empty-content">
+
+          <div class="empty-icon">
+            ✎
+          </div>
+
+          <h3>
+            No notes found
+          </h3>
+
+          <p>
+            Create a note to keep important customer information here.
+          </p>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

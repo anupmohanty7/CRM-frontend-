@@ -1,0 +1,193 @@
+<div class="note-form-page">
+
+  <div class="page-header">
+
+    <div class="page-heading">
+
+      <span class="eyebrow">
+        CUSTOMER RELATIONSHIP
+      </span>
+
+      <h1>
+        {{ isEditMode ? 'Edit Note' : 'Add Note' }}
+      </h1>
+
+      <p>
+        {{
+          isEditMode
+            ? 'Update the customer note.'
+            : 'Record important information about a customer.'
+        }}
+      </p>
+
+    </div>
+
+    <a
+      routerLink="/notes"
+      class="back-button"
+    >
+      Back to Notes
+    </a>
+
+  </div>
+
+
+  <!-- LOADING -->
+
+  <div
+    class="loading-state"
+    *ngIf="isLoading"
+  >
+
+    <div class="loading-spinner"></div>
+
+    <p>
+      Loading note...
+    </p>
+
+  </div>
+
+
+  <!-- FORM -->
+
+  <div
+    class="form-card"
+    *ngIf="!isLoading"
+  >
+
+    <form
+      #noteForm="ngForm"
+      (ngSubmit)="submit(noteForm)"
+      novalidate
+    >
+
+      <!-- CUSTOMER -->
+
+      <div class="form-group">
+
+        <label for="customer">
+          Customer
+        </label>
+
+        <select
+          id="customer"
+          name="customer"
+          [(ngModel)]="note.customer.id"
+          required
+          #customer="ngModel"
+        >
+
+          <option
+            [ngValue]="0"
+          >
+            Select a customer
+          </option>
+
+          <option
+            *ngFor="let customer of customers"
+            [ngValue]="customer.id"
+            >
+            {{ customer.firstname }}
+            {{ customer.lastname }}
+            {{ customer.company ? ' — ' + customer.company : '' }}
+          </option>
+
+        </select>
+
+        <small
+          class="validation-message"
+          *ngIf="
+            customer.invalid &&
+            customer.touched
+          "
+        >
+          Please select a customer.
+        </small>
+
+      </div>
+
+
+      <!-- NOTE -->
+
+      <div class="form-group">
+
+        <label for="content">
+          Note
+        </label>
+
+        <textarea
+          id="content"
+          name="content"
+          rows="9"
+          placeholder="Write your note here..."
+          [(ngModel)]="note.content"
+          required
+          minlength="2"
+          #content="ngModel"
+        ></textarea>
+
+        <div class="field-footer">
+
+          <small
+            class="validation-message"
+            *ngIf="
+              content.invalid &&
+              content.touched
+            "
+          >
+            Please enter the note content.
+          </small>
+
+          <span class="character-count">
+            {{ note.content?.length || 0 }} characters
+          </span>
+
+        </div>
+
+      </div>
+
+
+      <!-- ERROR -->
+
+      <div
+        class="form-error"
+        *ngIf="errorMessage"
+      >
+
+        {{ errorMessage }}
+
+      </div>
+
+
+      <!-- ACTIONS -->
+
+      <div class="form-actions">
+
+        <a
+          routerLink="/notes"
+          class="cancel-button"
+        >
+          Cancel
+        </a>
+
+        <button
+          type="submit"
+          class="save-button"
+          [disabled]="isSaving"
+        >
+
+          {{
+            isSaving
+              ? 'Saving...'
+              : (isEditMode ? 'Update Note' : 'Save Note')
+          }}
+
+        </button>
+
+      </div>
+
+    </form>
+
+  </div>
+
+</div>

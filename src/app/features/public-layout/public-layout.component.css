@@ -1,0 +1,354 @@
+.public-layout {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+
+  color: #292822;
+
+  background:
+    radial-gradient(
+      circle at 15% 20%,
+      rgba(166, 139, 74, 0.08),
+      transparent 28%
+    ),
+    radial-gradient(
+      circle at 85% 75%,
+      rgba(78, 111, 94, 0.08),
+      transparent 30%
+    ),
+    #f5f0e5;
+
+  position: relative;
+  overflow: hidden;
+}
+
+
+/* --------------------------------
+   Subtle washi-paper atmosphere
+--------------------------------- */
+
+.public-layout::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+
+  pointer-events: none;
+
+  opacity: 0.22;
+
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      rgba(60, 54, 43, 0.025) 0,
+      rgba(60, 54, 43, 0.025) 1px,
+      transparent 1px,
+      transparent 4px
+    );
+
+  z-index: 0;
+}
+
+
+/* --------------------------------
+   Header
+--------------------------------- */
+
+.public-header {
+  height: 82px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 0 7%;
+
+  position: relative;
+  z-index: 2;
+
+  background: rgba(248, 244, 234, 0.78);
+
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+
+  border-bottom: 1px solid rgba(166, 139, 74, 0.38);
+}
+
+
+/* --------------------------------
+   Brand
+--------------------------------- */
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.brand-mark {
+  width: 38px;
+  height: 38px;
+
+  display: grid;
+  place-items: center;
+
+  border: 1px solid #a68b4a;
+  border-radius: 50%;
+
+  color: #8b7139;
+
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 20px;
+
+  position: relative;
+}
+
+.brand-mark::after {
+  content: "";
+  position: absolute;
+
+  inset: 4px;
+
+  border: 1px solid rgba(166, 139, 74, 0.28);
+  border-radius: 50%;
+}
+
+.brand-text {
+  display: flex;
+  align-items: baseline;
+  gap: 7px;
+}
+
+.brand-name {
+  font-family: Georgia, "Times New Roman", serif;
+
+  font-size: 23px;
+  letter-spacing: 0.04em;
+}
+
+.brand-subtitle {
+  font-family: Arial, sans-serif;
+
+  font-size: 10px;
+  letter-spacing: 0.18em;
+
+  color: #77715f;
+}
+
+
+/* --------------------------------
+   Navigation
+--------------------------------- */
+
+.public-navigation {
+  display: flex;
+  align-items: center;
+  gap: 34px;
+}
+
+.public-navigation a {
+  position: relative;
+
+  color: #464238;
+
+  text-decoration: none;
+
+  font-family: Arial, sans-serif;
+  font-size: 13px;
+  letter-spacing: 0.06em;
+
+  transition:
+    color 0.3s ease,
+    transform 0.3s ease;
+}
+
+.public-navigation a::after {
+  content: "";
+
+  position: absolute;
+
+  left: 0;
+  bottom: -8px;
+
+  width: 0;
+  height: 1px;
+
+  background: #a68b4a;
+
+  transition: width 0.35s ease;
+}
+
+.public-navigation a:hover {
+  color: #80652e;
+
+  transform: translateY(-1px);
+}
+
+.public-navigation a:hover::after {
+  width: 100%;
+}
+
+
+/* --------------------------------
+   Sign in button
+--------------------------------- */
+
+.public-navigation .login-link {
+  padding: 10px 21px;
+
+  border: 1px solid rgba(166, 139, 74, 0.65);
+  border-radius: 999px;
+
+  color: #6f592d;
+
+  background: rgba(255, 252, 244, 0.45);
+}
+
+.public-navigation .login-link::after {
+  display: none;
+}
+
+.public-navigation .login-link:hover {
+  background: rgba(166, 139, 74, 0.09);
+
+  transform: translateY(-2px);
+}
+
+
+/* --------------------------------
+   Main routed content
+--------------------------------- */
+
+.public-content {
+  flex: 1;
+
+  position: relative;
+  z-index: 1;
+}
+
+
+/* --------------------------------
+   Footer
+--------------------------------- */
+
+.public-footer {
+  min-height: 82px;
+
+  display: flex;
+  align-items: center;
+
+  padding: 0 7%;
+
+  gap: 24px;
+
+  position: relative;
+  z-index: 2;
+
+  border-top: 1px solid rgba(166, 139, 74, 0.35);
+
+  background: rgba(239, 233, 220, 0.65);
+
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+
+  font-family: Arial, sans-serif;
+  font-size: 12px;
+
+  color: #706b5d;
+}
+
+.footer-brand {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+
+  color: #4b473d;
+
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 15px;
+}
+
+.footer-mark {
+  width: 25px;
+  height: 25px;
+
+  display: grid;
+  place-items: center;
+
+  border: 1px solid rgba(166, 139, 74, 0.65);
+  border-radius: 50%;
+
+  font-size: 12px;
+}
+
+.footer-divider {
+  width: 1px;
+  height: 20px;
+
+  background: rgba(166, 139, 74, 0.35);
+}
+
+.footer-footer p {
+  margin: 0;
+}
+
+.footer-copyright {
+  margin-left: auto;
+
+  opacity: 0.7;
+}
+
+
+/* --------------------------------
+   Responsive
+--------------------------------- */
+
+@media (max-width: 800px) {
+
+  .public-header {
+    padding: 0 5%;
+  }
+
+  .public-navigation {
+    gap: 18px;
+  }
+
+  .public-navigation a:not(.login-link) {
+    display: none;
+  }
+
+  .public-footer {
+    padding: 20px 5%;
+
+    flex-wrap: wrap;
+  }
+
+  .footer-copyright {
+    margin-left: 0;
+  }
+}
+
+
+@media (max-width: 500px) {
+
+  .brand-subtitle {
+    display: none;
+  }
+
+  .public-header {
+    height: 72px;
+  }
+
+  .brand-name {
+    font-size: 20px;
+  }
+
+  .public-footer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .footer-divider {
+    display: none;
+  }
+}

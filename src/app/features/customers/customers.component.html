@@ -1,0 +1,456 @@
+<div class="customers-page">
+
+  <!-- PAGE HEADER -->
+
+  <div class="page-header">
+
+    <div class="page-heading">
+
+      <span class="eyebrow">
+        CRM
+      </span>
+
+      <h1>
+        Customers
+      </h1>
+
+      <p>
+        Manage your customers and leads from one place.
+      </p>
+
+    </div>
+
+
+    <a
+      routerLink="/customers/new"
+      class="add-customer-button"
+    >
+      + Add Customer
+    </a>
+
+  </div>
+
+
+  <!-- SUMMARY CARDS -->
+
+  <div class="summary-grid">
+
+    <div class="summary-card">
+
+      <span class="summary-label">
+        Customers
+      </span>
+
+      <strong>
+        {{ totalCustomers }}
+      </strong>
+
+      <span class="summary-description">
+        Actual customers
+      </span>
+
+    </div>
+
+
+    <div class="summary-card">
+
+      <span class="summary-label">
+        Leads
+      </span>
+
+      <strong>
+        {{ totalLeads }}
+      </strong>
+
+      <span class="summary-description">
+        Potential customers
+      </span>
+
+    </div>
+
+
+    <div class="summary-card">
+
+      <span class="summary-label">
+        Active
+      </span>
+
+      <strong>
+        {{ totalActive }}
+      </strong>
+
+      <span class="summary-description">
+        Active records
+      </span>
+
+    </div>
+
+
+    <div class="summary-card">
+
+      <span class="summary-label">
+        Converted
+      </span>
+
+      <strong>
+        {{ convertedLeads }}
+      </strong>
+
+      <span class="summary-description">
+        Converted leads
+      </span>
+
+    </div>
+
+  </div>
+
+
+  <!-- SEARCH / FILTER -->
+
+  <div class="filter-bar">
+
+    <div class="search-container">
+
+      <span class="search-icon">
+        ⌕
+      </span>
+
+      <input
+        type="text"
+        [(ngModel)]="searchTerm"
+        placeholder="Search by name, email, phone or company..."
+      >
+
+    </div>
+
+
+    <div class="filter-container">
+
+      <select
+        [(ngModel)]="selectedType"
+      >
+
+        <option value="all">
+          All Types
+        </option>
+
+        <option value="customer">
+          Customers
+        </option>
+
+        <option value="lead">
+          Leads
+        </option>
+
+      </select>
+
+
+      <select
+        [(ngModel)]="selectedStatus"
+      >
+
+        <option value="all">
+          All Status
+        </option>
+
+        <option value="active">
+          Active
+        </option>
+
+        <option value="inactive">
+          Inactive
+        </option>
+
+      </select>
+
+    </div>
+
+  </div>
+
+
+  <!-- LOADING -->
+
+  <div
+    class="loading-state"
+    *ngIf="isLoading"
+  >
+
+    <div class="loading-spinner"></div>
+
+    <p>
+      Loading customers...
+    </p>
+
+  </div>
+
+
+  <!-- ERROR -->
+
+  <div
+    class="error-state"
+    *ngIf="!isLoading && errorMessage"
+  >
+
+    <div class="error-content">
+
+      <h3>
+        Something went wrong
+      </h3>
+
+      <p>
+        {{ errorMessage }}
+      </p>
+
+      <button
+        type="button"
+        (click)="loadCustomers()"
+      >
+        Try Again
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <!-- CUSTOMER TABLE -->
+
+  <div
+    class="table-card"
+    *ngIf="!isLoading && !errorMessage"
+  >
+
+    <div class="table-header">
+
+      <div>
+
+        <h2>
+          All Customers
+        </h2>
+
+        <p>
+          {{ filteredCustomers.length }}
+          records found
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <div class="table-wrapper">
+
+      <table>
+
+        <thead>
+
+          <tr>
+
+            <th>
+              Customer
+            </th>
+
+            <th>
+              Email
+            </th>
+
+            <th>
+              Phone
+            </th>
+
+            <th>
+              Company
+            </th>
+
+            <th>
+              Type
+            </th>
+
+            <th>
+              Status
+            </th>
+
+            <th>
+              Created
+            </th>
+
+          </tr>
+
+        </thead>
+
+
+        <tbody>
+
+          <!-- CUSTOMER ROW -->
+
+          <tr
+            *ngFor="let customer of filteredCustomers"
+            [routerLink]="[
+              '/customers',
+              customer.id
+            ]"
+            class="customer-row"
+          >
+
+            <!-- CUSTOMER -->
+
+            <td>
+
+              <div class="customer-cell">
+
+                <div class="customer-avatar">
+
+                  {{
+                    customer.firstname
+                      .charAt(0)
+                      .toUpperCase()
+                  }}
+
+                </div>
+
+
+                <div class="customer-info">
+
+                  <span class="customer-name">
+
+                    {{ getCustomerName(customer) }}
+
+                  </span>
+
+                </div>
+
+              </div>
+
+            </td>
+
+
+            <!-- EMAIL -->
+
+            <td>
+
+              <span class="secondary-text">
+
+                {{ customer.email }}
+
+              </span>
+
+            </td>
+
+
+            <!-- PHONE -->
+
+            <td>
+
+              <span class="secondary-text">
+
+                {{ customer.phone || '-' }}
+
+              </span>
+
+            </td>
+
+
+            <!-- COMPANY -->
+
+            <td>
+
+              <span class="secondary-text">
+
+                {{ customer.company || '-' }}
+
+              </span>
+
+            </td>
+
+
+            <!-- TYPE -->
+
+            <td>
+
+              <span
+                class="type-badge"
+                [class.lead-badge]="
+                  customer.customerType?.toLowerCase() === 'lead'
+                "
+              >
+
+                {{ getCustomerTypeLabel(customer) }}
+
+              </span>
+
+            </td>
+
+
+            <!-- STATUS -->
+
+            <td>
+
+              <span
+                class="status-badge"
+                [class.inactive-badge]="
+                  customer.status?.toLowerCase() === 'inactive'
+                "
+              >
+
+                {{ customer.status }}
+
+              </span>
+
+            </td>
+
+
+            <!-- CREATED -->
+
+            <td>
+
+              <span class="secondary-text">
+
+                {{ formatDate(customer.createdAt) }}
+
+              </span>
+
+            </td>
+
+          </tr>
+
+
+          <!-- EMPTY STATE -->
+
+          <tr
+            *ngIf="filteredCustomers.length === 0"
+          >
+
+            <td
+              colspan="7"
+              class="empty-state"
+            >
+
+              <div class="empty-content">
+
+                <div class="empty-icon">
+                  ◌
+                </div>
+
+                <h3>
+                  No customers found
+                </h3>
+
+                <p>
+                  Try changing your search or filters.
+                </p>
+
+              </div>
+
+            </td>
+
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
+</div>

@@ -1,0 +1,354 @@
+<div class="custom-fields-page">
+
+  <!-- Header -->
+  <div class="page-header">
+    <div>
+      <span class="eyebrow">CUSTOMIZATION</span>
+
+      <h1>Custom Fields</h1>
+
+      <p>
+        Create and manage additional fields for your CRM.
+      </p>
+    </div>
+
+    <button
+      type="button"
+      class="add-button"
+      (click)="openCreateForm()"
+    >
+      <span>+</span>
+      Add Custom Field
+    </button>
+  </div>
+
+
+  <!-- Messages -->
+  <div
+    *ngIf="successMessage"
+    class="message success-message"
+  >
+    {{ successMessage }}
+  </div>
+
+  <div
+    *ngIf="errorMessage"
+    class="message error-message"
+  >
+    {{ errorMessage }}
+  </div>
+
+
+  <!-- Main Card -->
+  <div class="fields-card">
+
+    <div class="card-header">
+
+      <div>
+        <h2>Configured Fields</h2>
+
+        <p>
+          Manage the fields available for your CRM records.
+        </p>
+      </div>
+
+      <div class="search-box">
+
+        <span>⌕</span>
+
+        <input
+          type="text"
+          placeholder="Search fields..."
+          [(ngModel)]="searchTerm"
+          (input)="searchFields()"
+        />
+
+      </div>
+
+    </div>
+
+
+    <!-- Loading -->
+    <div
+      *ngIf="loading"
+      class="loading-state"
+    >
+      <div class="loader"></div>
+
+      <p>Loading custom fields...</p>
+    </div>
+
+
+    <!-- Empty -->
+    <div
+      *ngIf="!loading && filteredFields.length === 0"
+      class="empty-state"
+    >
+
+      <div class="empty-icon">
+        ◈
+      </div>
+
+      <h3>
+        {{ searchTerm ? 'No fields found' : 'No custom fields yet' }}
+      </h3>
+
+      <p>
+        {{
+          searchTerm
+            ? 'Try searching with another name or field type.'
+            : 'Create your first custom field to extend your CRM.'
+        }}
+      </p>
+
+      <button
+        *ngIf="!searchTerm"
+        type="button"
+        class="empty-button"
+        (click)="openCreateForm()"
+      >
+        Add Custom Field
+      </button>
+
+    </div>
+
+
+    <!-- Fields -->
+    <div
+      *ngIf="!loading && filteredFields.length > 0"
+      class="fields-list"
+    >
+
+      <!-- Table Header -->
+      <div class="table-header">
+
+        <span>FIELD NAME</span>
+
+        <span>TYPE</span>
+
+        <span>ID</span>
+
+        <span>ACTIONS</span>
+
+      </div>
+
+
+      <!-- Field Row -->
+      <div
+        *ngFor="let field of filteredFields"
+        class="field-row"
+      >
+
+        <div class="field-name">
+
+          <div class="field-icon">
+            {{ getTypeIcon(field.type) }}
+          </div>
+
+          <div>
+            <strong>
+              {{ field.name }}
+            </strong>
+
+            <small>
+              Custom field
+            </small>
+          </div>
+
+        </div>
+
+
+        <span
+          class="type-badge"
+          [ngClass]="field.type.toLowerCase()"
+        >
+          {{ getTypeLabel(field.type) }}
+        </span>
+
+
+        <span class="field-id">
+          #{{ field.id }}
+        </span>
+
+
+        <div class="actions">
+
+          <button
+            type="button"
+            class="action-button edit"
+            (click)="openEditForm(field)"
+          >
+            Edit
+          </button>
+
+          <button
+            type="button"
+            class="action-button delete"
+            (click)="deleteField(field)"
+          >
+            Delete
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- Create / Edit Modal -->
+  <div
+    *ngIf="showForm"
+    class="modal-backdrop"
+    (click)="closeForm()"
+  >
+
+    <div
+      class="modal"
+      (click)="$event.stopPropagation()"
+    >
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+
+        <div>
+
+          <span class="modal-eyebrow">
+            {{ editingField ? 'EDIT FIELD' : 'NEW FIELD' }}
+          </span>
+
+          <h2>
+            {{
+              editingField
+                ? 'Edit Custom Field'
+                : 'Create Custom Field'
+            }}
+          </h2>
+
+        </div>
+
+        <button
+          type="button"
+          class="close-button"
+          (click)="closeForm()"
+        >
+          ×
+        </button>
+
+      </div>
+
+
+      <!-- Modal Body -->
+      <div class="modal-body">
+
+        <div
+          *ngIf="errorMessage"
+          class="form-error"
+        >
+          {{ errorMessage }}
+        </div>
+
+
+        <div class="form-group">
+
+          <label for="fieldName">
+            Field Name
+          </label>
+
+          <input
+            id="fieldName"
+            type="text"
+            [(ngModel)]="fieldName"
+            placeholder="Enter field name"
+          />
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label for="fieldType">
+            Field Type
+          </label>
+
+          <select
+            id="fieldType"
+            [(ngModel)]="fieldType"
+          >
+
+            <option value="TEXT">
+              Text
+            </option>
+
+            <option value="NUMBER">
+              Number
+            </option>
+
+            <option value="BOOLEAN">
+              Boolean
+            </option>
+
+            <option value="DATE">
+              Date
+            </option>
+
+          </select>
+
+        </div>
+
+
+        <div class="type-description">
+
+          <strong>
+            {{ getTypeLabel(fieldType) }}
+          </strong>
+
+          <span>
+            {{
+              fieldType === 'TEXT'
+                ? 'Stores text values.'
+                : fieldType === 'NUMBER'
+                ? 'Stores numeric values.'
+                : fieldType === 'BOOLEAN'
+                ? 'Stores true or false values.'
+                : 'Stores date values.'
+            }}
+          </span>
+
+        </div>
+
+      </div>
+
+
+      <!-- Modal Footer -->
+      <div class="modal-footer">
+
+        <button
+          type="button"
+          class="cancel-button"
+          (click)="closeForm()"
+        >
+          Cancel
+        </button>
+
+        <button
+          type="button"
+          class="save-button"
+          (click)="saveField()"
+        >
+          {{
+            editingField
+              ? 'Update Field'
+              : 'Create Field'
+          }}
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
