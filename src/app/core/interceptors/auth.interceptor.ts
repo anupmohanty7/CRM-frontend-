@@ -15,9 +15,12 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
    * Login must NOT receive the old JWT.
    * The purpose of this request is to get a new JWT.
    */
-  if (req.url.endsWith('/api/auth/login')) {
-    return next(req);
-  }
+  if (
+  req.url.endsWith('/api/auth/login') ||
+  req.url.endsWith('/api/auth/register')
+) {
+  return next(req);
+}
 
   const token = authService.getToken();
 
