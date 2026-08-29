@@ -9,7 +9,7 @@ import { Note } from '../../shared/models/note';
 })
 export class NoteService {
 
-  private apiUrl = 'http://localhost:8080/api/notes';
+  private apiUrl = 'https://crm-3dip.onrender.com/api/notes';
 
   constructor(private http: HttpClient) {}
 

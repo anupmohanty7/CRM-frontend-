@@ -14,7 +14,7 @@ export interface CreateCustomFieldRequest {
 })
 export class CustomFieldService {
 
-  private readonly apiUrl = 'http://localhost:8080/api/custom-fields';
+  private readonly apiUrl = 'https://crm-3dip.onrender.com/api/custom-fields';
 
   constructor(private http: HttpClient) {}
 

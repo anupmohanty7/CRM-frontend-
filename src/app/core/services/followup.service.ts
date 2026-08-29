@@ -8,7 +8,7 @@ import { FollowUp } from '../../shared/models/followup';
 })
 export class FollowUpService {
 
-  private apiUrl = 'http://localhost:8080/api/followups';
+  private apiUrl = 'https://crm-3dip.onrender.com/api/followups';
 
   constructor(private http: HttpClient) {}
 

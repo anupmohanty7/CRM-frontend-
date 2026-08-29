@@ -16,7 +16,7 @@ import {
 })
 export class UserService {
 
-  private apiUrl = 'http://localhost:8080/api/users';
+  private apiUrl = 'https://crm-3dip.onrender.com/api/users';
 
   constructor(private http: HttpClient) {}
 

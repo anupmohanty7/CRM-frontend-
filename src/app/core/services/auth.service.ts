@@ -20,7 +20,7 @@ export interface CreateAccountRequest {
 })
 export class AuthService {
 
-  private apiUrl = 'http://localhost:8080/api/auth';
+  private apiUrl = 'https://crm-3dip.onrender.com/api/auth';;
 
   private readonly tokenKey = 'leadhelp_token';
 

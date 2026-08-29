@@ -9,7 +9,7 @@ import { Dashboard } from '../../shared/models/dashboard.model';
 })
 export class DashboardService {
 
-  private readonly apiUrl = 'http://localhost:8080/api/dashboard';
+  private readonly apiUrl = 'https://crm-3dip.onrender.com/api/dashboard';
 
   constructor(private http: HttpClient) {}
 

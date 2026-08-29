@@ -9,7 +9,7 @@ import { Customer } from '../../shared/models/customer';
 })
 export class CustomerService {
 
-  private apiUrl = 'http://localhost:8080/api/customers';
+  private apiUrl = 'https://crm-3dip.onrender.com/api/customers';
 
   constructor(private http: HttpClient) {}
 
