@@ -835,3 +835,35 @@
 
   transform: none;
 }
+.login-footer {
+  margin-top: 28px;
+  text-align: center;
+}
+
+.register-prompt {
+  margin-bottom: 14px;
+  color: #777268;
+  font-size: 13px;
+}
+
+.register-prompt a {
+  display: block;
+  margin-top: 6px;
+  color: #76613e;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.register-prompt a:hover {
+  text-decoration: underline;
+}
+
+.login-footer > a {
+  color: #777268;
+  font-size: 13px;
+  text-decoration: none;
+}
+
+.login-footer > a:hover {
+  color: #292821;
+}

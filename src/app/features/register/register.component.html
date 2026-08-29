@@ -1,0 +1,154 @@
+<div class="register-page">
+
+  <div class="register-card">
+
+    <div class="register-header">
+
+      <span class="eyebrow">LEADHELP CRM</span>
+
+      <h1>Create your account</h1>
+
+      <p>
+        Set up your administrator account to get started.
+      </p>
+
+    </div>
+
+    <form
+  (ngSubmit)="register()"
+  #registerForm="ngForm"
+  autocomplete="off"
+>
+
+      <div class="name-row">
+
+        <div class="form-group">
+
+          <label for="firstName">
+            First Name
+          </label>
+
+          <input
+            id="firstName"
+            type="text"
+            name="firstName"
+            [(ngModel)]="registerData.firstName"
+            placeholder="Enter first name"
+            required
+          >
+
+        </div>
+
+        <div class="form-group">
+
+          <label for="lastName">
+            Last Name
+          </label>
+
+          <input
+            id="lastName"
+            type="text"
+            name="lastName"
+            [(ngModel)]="registerData.lastName"
+            placeholder="Enter last name"
+          >
+
+        </div>
+
+      </div>
+
+      <div class="form-group">
+
+        <label for="email">
+          Email
+        </label>
+
+        <input
+          id="email"
+          type="email"
+          name="email"
+          [(ngModel)]="registerData.email"
+          placeholder="Enter your email"
+          required
+        >
+
+      </div>
+
+      <div class="form-group">
+
+        <label for="password">
+          Password
+        </label>
+
+        <input
+  id="password"
+  type="password"
+  name="password"
+  [(ngModel)]="registerData.password"
+  placeholder="Create a password"
+  autocomplete="new-password"
+  required
+>
+
+        <small>
+          Minimum 8 characters with uppercase, lowercase,
+          number and special character.
+        </small>
+
+      </div>
+
+      <div class="form-group">
+
+        <input
+  id="confirmPassword"
+  type="password"
+  name="confirmPassword"
+  [(ngModel)]="registerData.confirmPassword"
+  placeholder="Confirm your password"
+  autocomplete="new-password"
+  required
+>
+
+   
+
+      </div>
+
+      <div
+        class="message error"
+        *ngIf="errorMessage"
+      >
+        {{ errorMessage }}
+      </div>
+
+      <div
+        class="message success"
+        *ngIf="successMessage"
+      >
+        {{ successMessage }}
+      </div>
+
+      <button
+        type="submit"
+        [disabled]="isLoading"
+      >
+        {{ isLoading ? 'Creating Account...' : 'Create Account' }}
+      </button>
+
+    </form>
+
+    <div class="login-link">
+
+      Already have an account?
+
+      <button
+        type="button"
+        (click)="goToLogin()"
+      >
+        Sign in
+      </button>
+
+    </div>
+
+  </div>
+
+</div>

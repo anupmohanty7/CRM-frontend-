@@ -7,6 +7,14 @@ interface LoginRequest {
   password: string;
 }
 
+export interface CreateAccountRequest {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -38,6 +46,16 @@ export class AuthService {
           this.setToken(token);
         })
       );
+  }
+
+  register(
+    request: CreateAccountRequest
+  ): Observable<any> {
+
+    return this.http.post(
+      `${this.apiUrl}/register`,
+      request
+    );
   }
 
   setToken(token: string): void {

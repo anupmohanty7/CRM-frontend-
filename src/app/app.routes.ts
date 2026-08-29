@@ -17,6 +17,7 @@ import { FollowupsComponent } from './features/followups/followups.component';
 import { FollowupFormComponent } from './features/followups/followup-form/followup-form.component';
 import { NoteFormComponent } from './features/notes/note-form/note-form.component';
 import { NotesComponent } from './features/notes/notes.component';
+import { RegisterComponent } from './features/register/register.component';
 
 export const routes: Routes = [
 
@@ -28,17 +29,22 @@ export const routes: Routes = [
 
     children: [
 
-      {
-        path: '',
-        component: LandingComponent
-      },
+  {
+    path: '',
+    component: LandingComponent
+  },
 
-      {
-        path: 'login',
-        component: LoginComponent
-      }
+  {
+    path: 'login',
+    component: LoginComponent
+  },
 
-    ]
+  {
+    path: 'register',
+    component: RegisterComponent
+  }
+
+]
 
   },
 
