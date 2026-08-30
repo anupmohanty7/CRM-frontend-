@@ -522,7 +522,7 @@
 }
 
 .feature-card.featured-card {
-  transform: translateY(-12px);
+  transform: none;
 
   background:
     linear-gradient(
@@ -533,7 +533,7 @@
 }
 
 .feature-card.featured-card:hover {
-  transform: translateY(-19px);
+  transform: translateY(-7px);
 }
 
 .feature-number {
