@@ -143,30 +143,36 @@
 
 
           <div class="form-group">
+  <div class="password-label">
+    <label for="password">
+      PASSWORD
+    </label>
 
-            <div class="password-label">
+    <a href="#">
+      Forgot password?
+    </a>
+  </div>
 
-              <label for="password">
-                PASSWORD
-              </label>
+  <div class="password-input-wrapper">
+    <input
+      id="password"
+      [type]="showPassword ? 'text' : 'password'"
+      name="password"
+      [(ngModel)]="password"
+      placeholder="Enter your password"
+      autocomplete="current-password"
+    >
 
-              <a href="#">
-                Forgot password?
-              </a>
-
-            </div>
-
-            <input
-            id="password"
-            type="password"
-            name="password"
-            [(ngModel)]="password"
-            placeholder="Enter your password"
-            autocomplete="current-password"
-            >
-
-          </div>
-
+    <button
+      type="button"
+      class="password-toggle"
+      (click)="showPassword = !showPassword"
+      [attr.aria-label]="showPassword ? 'Hide password' : 'Show password'"
+    >
+      {{ showPassword ? 'Hide' : 'Show' }}
+    </button>
+  </div>
+</div>
 
           <div class="remember-row">
 

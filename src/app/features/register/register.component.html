@@ -76,42 +76,64 @@
 
       <div class="form-group">
 
-        <label for="password">
-          Password
-        </label>
+  <label for="password">
+    Password
+  </label>
 
-        <input
-  id="password"
-  type="password"
-  name="password"
-  [(ngModel)]="registerData.password"
-  placeholder="Create a password"
-  autocomplete="new-password"
-  required
->
+  <div class="password-input-wrapper">
+    <input
+      id="password"
+      [type]="showPassword ? 'text' : 'password'"
+      name="password"
+      [(ngModel)]="registerData.password"
+      placeholder="Create a password"
+      autocomplete="new-password"
+      required
+    >
 
-        <small>
-          Minimum 8 characters with uppercase, lowercase,
-          number and special character.
-        </small>
+    <button
+      type="button"
+      class="password-toggle"
+      (click)="showPassword = !showPassword"
+    >
+      {{ showPassword ? 'Hide' : 'Show' }}
+    </button>
+  </div>
 
-      </div>
+  <small>
+    Minimum 8 characters with uppercase, lowercase,
+    number and special character.
+  </small>
+
+</div>
 
       <div class="form-group">
 
-        <input
-  id="confirmPassword"
-  type="password"
-  name="confirmPassword"
-  [(ngModel)]="registerData.confirmPassword"
-  placeholder="Confirm your password"
-  autocomplete="new-password"
-  required
->
+  <label for="confirmPassword">
+    Confirm Password
+  </label>
 
-   
+  <div class="password-input-wrapper">
+    <input
+      id="confirmPassword"
+      [type]="showConfirmPassword ? 'text' : 'password'"
+      name="confirmPassword"
+      [(ngModel)]="registerData.confirmPassword"
+      placeholder="Confirm your password"
+      autocomplete="new-password"
+      required
+    >
 
-      </div>
+    <button
+      type="button"
+      class="password-toggle"
+      (click)="showConfirmPassword = !showConfirmPassword"
+    >
+      {{ showConfirmPassword ? 'Hide' : 'Show' }}
+    </button>
+  </div>
+
+</div>
 
       <div
         class="message error"

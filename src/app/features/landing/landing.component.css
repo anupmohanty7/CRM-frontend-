@@ -1154,3 +1154,13 @@
   }
 
 }
+.workspace-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  align-items: stretch;
+}
+
+.workspace-grid > * {
+  height: 100%;
+}

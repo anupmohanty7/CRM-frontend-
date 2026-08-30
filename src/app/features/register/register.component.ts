@@ -30,7 +30,8 @@ export class RegisterComponent {
   errorMessage = '';
   successMessage = '';
   isLoading = false;
-
+  showPassword = false;
+showConfirmPassword = false;
   constructor(
     private authService: AuthService,
     private router: Router

@@ -867,3 +867,35 @@
 .login-footer > a:hover {
   color: #292821;
 }
+.password-input-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.password-input-wrapper input {
+  width: 100%;
+  padding-right: 70px;
+}
+
+.password-toggle {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+
+  border: none;
+  background: transparent;
+
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+
+  cursor: pointer;
+  padding: 5px 6px;
+
+  color: inherit;
+}
+
+.password-toggle:hover {
+  opacity: 0.7;
+}
